@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Book Statistics{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .stats-container {
+            margin-top: 20px;
+        }
+        .stats-card {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #ffffff;
+        }
+        .list-group-item {
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">Book Manager</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'book_list' %}active{% endif %}" href="{% url 'book_list' %}">View Books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'book_statistics' %}active{% endif %}" href="{% url 'book_statistics' %}">Statistics</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container stats-container">
+        {% block content %}
+        <div class="mb-4">
+            <h1 class="text-primary">Book Statistics</h1>
+        </div>
+
+        <div class="stats-card">
+            <h5>Total Books: <span class="badge bg-primary">{{ total_books }}</span></h5>
+        </div>
+
+        <div class="stats-card">
+            <h3>Books by Author</h3>
+            <ul class="list-group">
+                {% for author in books_by_author %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ author.author }}
+                    <span class="badge bg-secondary">{{ author.author_count }} books</span>
+                </li>
+                {% empty %}
+                <li class="list-group-item">No books available by any author.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="stats-card">
+            <h3>Books by Published Year</h3>
+            <ul class="list-group">
+                {% for year in books_by_year %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ year.published_date__year }}
+                    <span class="badge bg-secondary">{{ year.year_count }} books</span>
+                </li>
+                {% empty %}
+                <li class="list-group-item">No books available by year.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endblock %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

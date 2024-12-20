@@ -1,0 +1,20 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Delete Book{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>Delete Book</h1>
+        <div>
+            <strong>Warning!</strong> Are you sure you want to permanently delete the book titled 
+            <strong>{{ object.title }}</strong>?
+        </div>
+        <p>This action cannot be undone.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Yes, Delete</button>
+            <a href="{% url 'book_list' %}">Cancel</a>
+        </form>
+    </div>
+{% endblock %}
